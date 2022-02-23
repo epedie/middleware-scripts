@@ -1,0 +1,73 @@
+#!/bin/bash
+#Descripteion: sonarqube configuration
+#Author Pedie Feb 22 2022
+
+
+echo " Sonarqube installation and configuration in progress, please, wait"
+echo
+sleep 3
+echo "update the server and install java as a  prerequisite"
+sleep 2
+sudo yum update -y
+sleep 2
+echo
+sudo yum install java-11-openjdk-devel -y.
+echo
+sleep 2
+sudo yum install java-11-openjdk -y
+sleep 2
+echo
+cd /opt
+sudo yum install wget -y
+sleep 2
+echo "downloading SonarQube latest version"
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.3.0.51899.zip
+sleep 2echo
+
+echo "extracting package"
+sleep 2
+sudo yum install unzip -y
+sleep 2
+echo
+sudo unzip /opt/sonarqube-9.3.0.51899.zip
+sleep 2
+echo
+echo "change ownership and switch to binaries..."
+sleep 2
+sudo chown -R vagrant:vagrant /opt/sonarqube-9.3.0.51899
+
+sleep 2
+
+echo
+
+cd /opt/sonarqube-9.3.0.51899/bin/linux-x86-64
+sleep 2
+echo
+./sonar.sh start
+
+echo
+sleep 2
+echo "open port for firewald"
+sudo firewall-cmd --permanent --add-port=9000/tcp
+sleep 2
+echo
+sudo firewall-cmd --reload
+
+echo
+echo "start and enable the firewalld"
+
+systemclt start firewalld
+echo
+sleep 2
+systemclt start firewalld
+
+systemctl enable firewalld
+
+sleep 2
+echo
+systemctl status firewalld
+systemctl enable firewalld
+
+sleep 2
+echo
+systemctl status firewalld
