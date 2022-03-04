@@ -9,51 +9,116 @@ sleep 3
 echo "update the server and install java as a  prerequisite"
 sleep 2
 sudo yum update -y
-sleep 2
+
+if [ $? -eq 0 ]
+
+then
+echo "system successfully updated, lets install Java"
+
+else 
+echo " system update failed"
+
+fi
 echo
+sleep 2
 sudo yum install java-11-openjdk-devel -y.
 echo
 sleep 2
 sudo yum install java-11-openjdk -y
+
+if [ $? -eq 0 ]
+
+then
+echo "Java is successfully installed, lets install wget"
+
+else 
+echo " Java installation failed"
+
+fi
+
+
 sleep 2
 echo
 cd /opt
 sudo yum install wget -y
+
+if [ $? -eq 0 ]
+
+then
+echo " wget is successfully installed, let's downloading SonarQube"
+
+else 
+echo " wget installation has failed"
+
+fi
 sleep 2
+echo
+
 echo "downloading SonarQube latest version"
 sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.3.0.51899.zip
-sleep 2echo
 
-echo "extracting package"
+if [ $? -eq 0 ]
+
+then
+echo " sonarqube package is successfully downloaded, let's extracting package"
+
+else 
+echo " sonarqube downloading has failed"
+
+fi
+sleep 2
+echo
+
+echo "install the extension and extract package"
 sleep 2
 sudo yum install unzip -y
 sleep 2
 echo
 sudo unzip /opt/sonarqube-9.3.0.51899.zip
+
+if [ $? -eq 0 ]
+
+then
+echo " package successfully extracted, let's change the ownership and switch to binaries"
+
+else 
+echo " package extraction has failed"
+
+fi
 sleep 2
 echo
+
 echo "change ownership and switch to binaries..."
 sleep 2
 sudo chown -R vagrant:vagrant /opt/sonarqube-9.3.0.51899
 
+if [$? -eq 0]
+then 
+echo " the ownership has changed, lets start sonar.sh"
+else
+echo "the ownership is not changed yet"
+fi
 sleep 2
-
 echo
 
 cd /opt/sonarqube-9.3.0.51899/bin/linux-x86-64
 sleep 2
 echo
 ./sonar.sh start
+if [$? -eq 0]
+then 
+echo "sonar.sh is started, time to open the port"
+else
+echo " sonar.sh need to be started"
+fi
 
 echo
 sleep 2
 echo "open port for firewald"
 sudo firewall-cmd --permanent --add-port=9000/tcp
-sleep 2
-echo
+if [$? -eq 0 ]
+then
 sudo firewall-cmd --reload
-
-echo
 echo "start and enable the firewalld"
 
 systemclt start firewalld
@@ -62,11 +127,11 @@ sleep 2
 systemclt start firewalld
 
 systemctl enable firewalld
-
+else
+echo " the firewalld is not enable"
+fi
 sleep 2
 echo
-systemctl status firewalld
-systemctl enable firewalld
 
 sleep 2
 echo
